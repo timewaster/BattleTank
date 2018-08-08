@@ -20,13 +20,17 @@ public:
 	ATankPlayerController();
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	ATank* GetControlledTank() const;
+
+
+private:
+	ATank * GetControlledTank() const;
 	// Start the tank moving the barrel so that a shot would hit where
 	// the crosshair intersects the world.
 	void AimTowardsCrosshair();
-	
-
-private:
 	// Return an OUT parameter, true if hit landscape
 	bool GetSightRayHitLocation(FVector& OutHitLocation);
+	UPROPERTY(EditAnywhere)
+	float CrosshairXLocation = 0.5;
+	UPROPERTY(EditAnywhere)
+	float CrosshairYLocation = 0.33333;
 };
