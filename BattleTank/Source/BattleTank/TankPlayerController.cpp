@@ -42,13 +42,15 @@ void ATankPlayerController::AimTowardsCrosshair() {
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) {
 	// Find crosshair position in pixel co-ordinates
 	int32 ViewportSizeX, ViewportSizeY;
-	FVector LookDirection;
+	FVector LookDirection , HitLocation;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 	FVector2D ScreenLocation = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
 	if (GetLookDirection(ScreenLocation, LookDirection)) {
-		UE_LOG(LogTemp, Warning, TEXT("Where we lookin' nigga?: %s"), *LookDirection.ToString());
+		// line trace along that look direction and see what we hit.
+		if (GetLookDirectionHitLocation(LookDirection, HitLocation)) {
+			UE_LOG(LogTemp, Warning, TEXT("Where we shootin' nigga?: %s"), *HitLocation.ToString());
+		}
 	}
-	// line trace along that look direction and see what we hit.
 	OutHitLocation = FVector(1.0);
 	return true;
 }
@@ -60,4 +62,17 @@ bool const ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVe
 		ScreenLocation.Y, 
 		WorldLocation, 
 		LookDirection);
+}
+
+bool const ATankPlayerController::GetLookDirectionHitLocation(FVector LookDirection, FVector & HitLocation) {
+	FHitResult HitResult;
+	auto StartLocation = PlayerCameraManager->GetCameraLocation();
+	auto EndLocation = StartLocation + LookDirection * LineTraceRange;
+	FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("")), false, GetOwner());
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility, TraceParams))
+		{
+		HitLocation = HitResult.Location;
+		return 	true;
+		}
+	return false;
 }
