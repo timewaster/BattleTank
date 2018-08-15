@@ -29,7 +29,7 @@ private:
 	// the crosshair intersects the world.
 	void AimTowardsCrosshair();
 	// Return an OUT parameter, true if hit landscape
-	bool GetSightRayHitLocation(FVector& OutHitLocation);
+	bool GetSightRayHitLocation(FVector& HitLocation);
 	bool const GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection);
 	bool const GetLookDirectionHitLocation(FVector LookDirection, FVector & HitLocation);
 	UPROPERTY(EditAnywhere)
