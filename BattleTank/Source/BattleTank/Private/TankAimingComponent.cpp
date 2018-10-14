@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 
 // Sets default values for this component's properties
@@ -17,12 +18,16 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet) {
 	Barrel = BarrelToSet;
 }
 
+void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet) {
+	Turret = TurretToSet;
+}
+
 
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	//auto OurTankName = GetOwner()->GetName();
 	//auto BarrelLocation = Barrel->GetComponentLocation();
-	if (!Barrel) { return; }
+	if (!Barrel || !Turret) { return; }
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	bool bHaveAimSolution = (UGameplayStatics::SuggestProjectileVelocity(
@@ -52,5 +57,6 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAtRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAtRotator - BarrelRotator;
-	Barrel->Elevate(DeltaRotator.Pitch); // TODO Remove Magic Number.
+	Barrel->Elevate(DeltaRotator.Pitch);
+	Turret->Rotate(DeltaRotator.Yaw);
 }
