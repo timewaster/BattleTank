@@ -48,7 +48,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) {
 	if (GetLookDirection(ScreenLocation, LookDirection)) {
 		// line trace along that look direction and see what we hit.
 		if (GetLookDirectionHitLocation(LookDirection, HitLocation)) {
-			//UE_LOG(LogTemp, Warning, TEXT("Where we shootin' nigga?: %s"), *HitLocation.ToString());
 		}
 	}
 	//OutHitLocation = FVector(1.0);
